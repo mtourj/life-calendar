@@ -7,6 +7,9 @@
   margin: 0 auto;
   padding: 10px;
   font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
@@ -36,8 +39,10 @@ h1 {
 }
 
 .stats {
+  width: 100%;
+  margin-left: 16px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 15px;
   background-color: #f5f5f5;
   border-radius: 5px;
@@ -130,4 +135,17 @@ h1 {
   margin-top: 10px;
   font-size: 0.7em;
   color: #666;
+}
+
+.calendar-explanation {
+  text-align: center;
+  align-self: center;
+  max-width: 600px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.calendar-explanation p {
+  margin: 8px 0;
 }
