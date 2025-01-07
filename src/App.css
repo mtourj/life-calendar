@@ -1,0 +1,84 @@
+.root {
+    display: flex;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin: 5px 0 10px;
+  font-size: 20px;
+}
+
+.birthdate-input {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.birthdate-input input {
+  margin-left: 10px;
+  padding: 3px;
+}
+
+.calendar {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.calendar th, .calendar td {
+  padding: 0;
+  text-align: center;
+  width: 12px;
+  height: 12px;
+}
+
+.week-number {
+  font-size: 7px;
+  color: #666;
+  font-weight: normal;
+  padding-bottom: 3px !important;
+}
+
+.year-number {
+  font-size: 8px;
+  color: #666;
+  text-align: right !important;
+  padding-right: 6px !important;
+  width: 25px !important;
+}
+
+.box-cell {
+  padding: 0;
+  line-height: 0;
+}
+
+.box {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.box.lived {
+  background-color: #333;
+}
+
+.box.current {
+  border: 1px solid #333;
+  background-clip: content-box;
+}
+
+.footer {
+  text-align: right;
+  margin-top: 10px;
+  font-size: 0.7em;
+  color: #666;
+}
