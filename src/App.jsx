@@ -5,6 +5,8 @@ import {
   differenceInMilliseconds,
   addWeeks,
   differenceInYears,
+  addYears,
+  differenceInDays,
 } from "date-fns";
 import { mortalityData } from "./mortalityData";
 import "./App.css";
@@ -41,18 +43,32 @@ function App() {
       ? { completedWeeks: 0, currentProgress: 0, age: 0 }
       : (() => {
           const birthdateObj = parseISO(birthdate);
+          // First get complete years
+          const completeYears = differenceInYears(now, birthdateObj);
+          // Then get the date after those complete years
+          const afterCompleteYears = addYears(birthdateObj, completeYears);
+          // Calculate remaining days and convert to weeks
+          const remainingDays = differenceInDays(now, afterCompleteYears);
+          const remainingWeeks = Math.floor(remainingDays / 7);
+          
+          // Calculate total completed weeks (subtract 1 to account for current week)
           const completedWeeks = Math.min(
-            Math.floor(differenceInWeeks(now, birthdateObj)),
+            (completeYears * 52) + remainingWeeks - 1,
             250 * 52
           ); // Max 250 years
-          const age = Math.min(differenceInYears(now, birthdateObj), 250); // Max 250 years
-          const lastCompletedWeekEnd = addWeeks(birthdateObj, completedWeeks);
-          const progressSinceLastWeek =
-            differenceInMilliseconds(now, lastCompletedWeekEnd) /
-            (7 * 24 * 60 * 60 * 1000);
+          const age = Math.min(completeYears, 250); // Max 250 years
+          
+          // Calculate progress within the current week
+          const weekStartDate = addWeeks(birthdateObj, completedWeeks);
+          const progressSinceLastWeek = differenceInMilliseconds(now, weekStartDate) / (7 * 24 * 60 * 60 * 1000);
+          
+          // If we're at the end of the week, move to the next week
+          const adjustedCompletedWeeks = progressSinceLastWeek >= 1 ? completedWeeks + 1 : completedWeeks;
+          const adjustedProgress = progressSinceLastWeek >= 1 ? 0 : progressSinceLastWeek;
+          
           return {
-            completedWeeks,
-            currentProgress: Math.min(1, Math.max(0, progressSinceLastWeek)),
+            completedWeeks: adjustedCompletedWeeks,
+            currentProgress: Math.min(1, Math.max(0, adjustedProgress)),
             age,
           };
         })();
