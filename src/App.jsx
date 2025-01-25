@@ -16,7 +16,6 @@ function App() {
     localStorage.getItem("birthdate") || ""
   );
   const [gender, setGender] = useState(localStorage.getItem("gender") || "");
-  const now = new Date();
 
   useEffect(() => {
     if (birthdate) {
@@ -42,6 +41,7 @@ function App() {
     const progress = !birthdate
       ? { completedWeeks: 0, currentProgress: 0, age: 0 }
       : (() => {
+          const now = new Date();
           const birthdateObj = parseISO(birthdate);
           // First get complete years
           const completeYears = differenceInYears(now, birthdateObj);
@@ -50,22 +50,22 @@ function App() {
           // Calculate remaining days and convert to weeks
           const remainingDays = differenceInDays(now, afterCompleteYears);
           const remainingWeeks = Math.floor(remainingDays / 7);
-          
+
           // Calculate total completed weeks (subtract 1 to account for current week)
           const completedWeeks = Math.min(
-            (completeYears * 52) + remainingWeeks - 1,
+            completeYears * 52 + remainingWeeks,
             250 * 52
           ); // Max 250 years
           const age = Math.min(completeYears, 250); // Max 250 years
-          
-          // Calculate progress within the current week
-          const weekStartDate = addWeeks(birthdateObj, completedWeeks);
-          const progressSinceLastWeek = differenceInMilliseconds(now, weekStartDate) / (7 * 24 * 60 * 60 * 1000);
-          
+
+          const progressSinceLastWeek = remainingDays / 7 - remainingWeeks;
+
           // If we're at the end of the week, move to the next week
-          const adjustedCompletedWeeks = progressSinceLastWeek >= 1 ? completedWeeks + 1 : completedWeeks;
-          const adjustedProgress = progressSinceLastWeek >= 1 ? 0 : progressSinceLastWeek;
-          
+          const adjustedCompletedWeeks =
+            progressSinceLastWeek >= 1 ? completedWeeks + 1 : completedWeeks;
+          const adjustedProgress =
+            progressSinceLastWeek >= 1 ? 0 : progressSinceLastWeek;
+
           return {
             completedWeeks: adjustedCompletedWeeks,
             currentProgress: Math.min(1, Math.max(0, adjustedProgress)),
@@ -98,7 +98,7 @@ function App() {
       initialLifeExpectancyWeeks: lifeExpectancyWeeks,
       stats: mortalityStats,
     };
-  }, [birthdate, gender, now]);
+  }, [birthdate, gender]);
 
   const calendar = useMemo(() => {
     if (!birthdate) return null;
